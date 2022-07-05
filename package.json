@@ -33,7 +33,12 @@
     "uri-scheme": "^1.0.120"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.9"
+    "@babel/core": "^7.12.9",
+    "@types/jest": "^28.1.4",
+    "@types/react": "^18.0.14",
+    "@types/react-native": "^0.69.2",
+    "@types/react-test-renderer": "^18.0.0",
+    "typescript": "^4.7.4"
   },
   "private": true
 }
