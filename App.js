@@ -1,13 +1,18 @@
-import React, { useState } from "react";
 import AppLoading from "expo-app-loading";
-import { Text, Image, View } from "react-native";
+import React, { useState } from "react";
 import * as Font from "expo-font";
+import { Image, useColorScheme } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Asset } from "expo-asset";
-import Tabs from "./navigation/Tabs";
 import { NavigationContainer } from "@react-navigation/native";
+import Tabs from "./navigation/Tabs";
+import Stack from "./navigation/Stack";
+import Root from "./navigation/Root";
+import { ThemeProvider } from "styled-components/native";
+import { darkTheme, lightTheme } from "./styled";
 
 const loadFonts = (fonts) => fonts.map((font) => Font.loadAsync(font));
+
 const loadImages = (images) =>
   images.map((image) => {
     if (typeof image === "string") {
@@ -16,24 +21,15 @@ const loadImages = (images) =>
       return Asset.loadAsync(image);
     }
   });
+
 export default function App() {
   const [ready, setReady] = useState(false);
-
   const onFinish = () => setReady(true);
-
   const startLoading = async () => {
-    // 로딩동안 일어나는일
-    // await new Promise((resolve) => setTimeout(resolve, 1000));
     const fonts = loadFonts([Ionicons.font]);
-    const images = loadImages([
-      require("./images/my_cat.jpeg"),
-      "http://newsimg.hankookilbo.com/2019/04/29/201904291390027161_3.jpg",
-    ]);
-    console.log(images);
-
-    await Promise.all(...fonts, ...images);
+    await Promise.all([...fonts]);
   };
-
+  const isDark = useColorScheme() === "dark";
   if (!ready) {
     return (
       <AppLoading
@@ -44,24 +40,10 @@ export default function App() {
     );
   }
   return (
-    <NavigationContainer>
-      <Tabs />
-    </NavigationContainer>
+    <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
+      <NavigationContainer>
+        <Root />
+      </NavigationContainer>
+    </ThemeProvider>
   );
 }
-
-// import React, { useState } from "react";
-// import AppLoading from "expo-app-loading";
-// import { Text, Image } from "react-native";
-// import * as Font from "expo-font";
-// import { Ionicons } from "@expo/vector-icons";
-// import { Asset, useAssets } from "expo-asset";
-
-// export default function App() {
-//   const [assets] = useAssets([require("./images/my_cat.jpeg"),"http://newsimg.hankookilbo.com/2019/04/29/201904291390027161_3.jpg"]);
-//   const [loaded] = Font.useFonts(Ionicons.font);
-//   if (!assets || !loaded) {
-//     return <AppLoading />;
-//   }
-//   return <Text>Done</Text>;
-// }
