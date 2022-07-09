@@ -52,9 +52,9 @@ const Slide: React.FC<SlideProps> = ({ backdropPath, posterPath, originalTitle, 
                 <Wrapper>
                     <Poster path={posterPath} />
                     <Column>
-                        <Title isDark={isDark}>{originalTitle}</Title>
-                        {voteAverage > 0 ? <Votes isDark={isDark}>⭐️ {voteAverage} / 10</Votes> : null}
-                        <OverView isDark={isDark}>{overview.slice(0, 90)}...</OverView>
+                        <Title>{originalTitle}</Title>
+                        {voteAverage > 0 ? <Votes>⭐️ {voteAverage} / 10</Votes> : null}
+                        <OverView>{overview.slice(0, 90)}...</OverView>
                     </Column>
                 </Wrapper>
             </BlurView>
