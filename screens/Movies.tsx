@@ -2,7 +2,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import Swiper from "react-native-swiper";
-import { ActivityIndicator, Dimensions, ScrollView, StyleSheet, useColorScheme } from "react-native";
+import { ActivityIndicator, Dimensions, RefreshControl, ScrollView, StyleSheet, useColorScheme } from "react-native";
 import { makeImagePath } from "../utils";
 import { BlurView } from "expo-blur";
 import Slides from "../components/Slide";
@@ -81,6 +81,7 @@ const ComingSoonTitle = styled(ListTitle)`
 `;
 
 const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = ({ navigation }) => {
+    const [refreshing, setRefreshing] = useState(false);
     const [loading, setLoading] = useState(true);
     const [nowPlaying, setNowPlaying] = useState([]);
     const [upComing, setUpComing] = useState([]);
@@ -118,14 +119,18 @@ const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = ({ navigation })
         getData();
     }, []);
 
-    const isDark = useColorScheme() === "dark";
+    const onRefreshing = async () => {
+        setRefreshing(true);
+        await getData();
+        setRefreshing(false);
+    };
 
     return loading ? (
         <Loader>
             <ActivityIndicator />
         </Loader>
     ) : (
-        <Container>
+        <Container refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefreshing} />}>
             <Swiper
                 horizontal={true}
                 containerStyle={{ marginBottom: 30, width: "100%", height: SCREEN_HEIGHT / 4 }}
