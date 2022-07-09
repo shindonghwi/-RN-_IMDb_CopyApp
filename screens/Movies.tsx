@@ -2,12 +2,8 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import Swiper from "react-native-swiper";
-import { ActivityIndicator, Dimensions, RefreshControl, ScrollView, StyleSheet, useColorScheme } from "react-native";
-import { makeImagePath } from "../utils";
-import { BlurView } from "expo-blur";
-import Slides from "../components/Slide";
+import { ActivityIndicator, Dimensions, RefreshControl, useColorScheme } from "react-native";
 import Slide from "../components/Slide";
-import Poster from "../components/Poster";
 import HMedia from "../components/HMedia";
 import VMedia from "../components/VMedia";
 
