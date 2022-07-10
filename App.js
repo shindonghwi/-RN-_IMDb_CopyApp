@@ -5,45 +5,43 @@ import { Image, useColorScheme } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Asset } from "expo-asset";
 import { NavigationContainer } from "@react-navigation/native";
-import Tabs from "./navigation/Tabs";
-import Stack from "./navigation/Stack";
 import Root from "./navigation/Root";
 import { ThemeProvider } from "styled-components/native";
 import { darkTheme, lightTheme } from "./styled";
 
+import { QueryClientProvider, QueryClient } from "react-query";
+
+const queryClient = new QueryClient();
+
 const loadFonts = (fonts) => fonts.map((font) => Font.loadAsync(font));
 
 const loadImages = (images) =>
-  images.map((image) => {
-    if (typeof image === "string") {
-      return Image.prefetch(image);
-    } else {
-      return Asset.loadAsync(image);
-    }
-  });
+    images.map((image) => {
+        if (typeof image === "string") {
+            return Image.prefetch(image);
+        } else {
+            return Asset.loadAsync(image);
+        }
+    });
 
 export default function App() {
-  const [ready, setReady] = useState(false);
-  const onFinish = () => setReady(true);
-  const startLoading = async () => {
-    const fonts = loadFonts([Ionicons.font]);
-    await Promise.all([...fonts]);
-  };
-  const isDark = useColorScheme() === "dark";
-  if (!ready) {
+    const [ready, setReady] = useState(false);
+    const onFinish = () => setReady(true);
+    const startLoading = async () => {
+        const fonts = loadFonts([Ionicons.font]);
+        await Promise.all([...fonts]);
+    };
+    const isDark = useColorScheme() === "dark";
+    if (!ready) {
+        return <AppLoading startAsync={startLoading} onFinish={onFinish} onError={console.error} />;
+    }
     return (
-      <AppLoading
-        startAsync={startLoading}
-        onFinish={onFinish}
-        onError={console.error}
-      />
+        <QueryClientProvider client={queryClient}>
+            <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
+                <NavigationContainer>
+                    <Root />
+                </NavigationContainer>
+            </ThemeProvider>
+        </QueryClientProvider>
     );
-  }
-  return (
-    <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
-      <NavigationContainer>
-        <Root />
-      </NavigationContainer>
-    </ThemeProvider>
-  );
 }
