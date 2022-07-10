@@ -61,7 +61,7 @@ const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = () => {
         isRefetching: isRefetchingTrending,
     } = useQuery(["movies", "trending"], moviesApi.trending);
     const onRefresh = async () => {
-        queryClient.refetchQueries(["movies"]);
+        await queryClient.refetchQueries(["movies"]);
     };
     const renderVMedia = ({ item }) => (
         <VMedia
