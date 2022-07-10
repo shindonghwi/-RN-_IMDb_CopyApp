@@ -17,7 +17,6 @@ const Tabs = () => {
                 backgroundColor: isDark ? BLACK_COLOR : "white",
             }}
             screenOptions={{
-                unmountOnBlur: true,
                 tabBarStyle: {
                     backgroundColor: isDark ? BLACK_COLOR : "white",
                 },
@@ -40,21 +39,27 @@ const Tabs = () => {
                 name="Movies"
                 component={Movies}
                 options={{
-                    tabBarIcon: ({ color, size }) => <Ionicons name={"film-outline"} color={color} size={size} />,
+                    tabBarIcon: ({ color, size }) => (
+                        <Ionicons name={"film-outline"} color={color} size={size} />
+                    ),
                 }}
             />
             <Tab.Screen
                 name="TV"
                 component={Tv}
                 options={{
-                    tabBarIcon: ({ color, size }) => <Ionicons name="tv-outline" color={color} size={size} />,
+                    tabBarIcon: ({ color, size }) => (
+                        <Ionicons name="tv-outline" color={color} size={size} />
+                    ),
                 }}
             />
             <Tab.Screen
                 name="Search"
                 component={Search}
                 options={{
-                    tabBarIcon: ({ color, size }) => <Ionicons name={"search-outline"} color={color} size={size} />,
+                    tabBarIcon: ({ color, size }) => (
+                        <Ionicons name={"search-outline"} color={color} size={size} />
+                    ),
                 }}
             />
         </Tab.Navigator>

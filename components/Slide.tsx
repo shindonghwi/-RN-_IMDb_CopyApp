@@ -1,38 +1,34 @@
-import React from "react";
-import styled from "styled-components/native";
-import { StyleSheet, useColorScheme, View } from "react-native";
-import { makeImagePath } from "../utils";
 import { BlurView } from "expo-blur";
+import React from "react";
+import { StyleSheet, useColorScheme, View } from "react-native";
+import styled from "styled-components/native";
+import { makeImgPath } from "../utils";
 import Poster from "./Poster";
 
-const BgImage = styled.Image``;
+const BgImg = styled.Image``;
 
-const Wrapper = styled.View`
-    flex-direction: row;
-    height: 100%;
-    align-items: center;
-    justify-content: center;
-`;
-
-const Title = styled.Text`
+const Title = styled.Text<{ isDark: boolean }>`
     font-size: 16px;
     font-weight: 600;
     color: ${(props) => (props.isDark ? "white" : props.theme.textColor)};
 `;
-
-const OverView = styled.Text`
-    margin-top: 10px;
-    color: ${(props) => (props.isDark ? "rgba(255, 255, 255, 0.8)" : props.theme.textColor)};
+const Wrapper = styled.View`
+    flex-direction: row;
+    height: 100%;
+    width: 90%;
+    margin: 0 auto;
+    justify-content: space-around;
+    align-items: center;
 `;
-
-const Votes = styled(OverView)`
-    font-size: 12px;
-    color: ${(props) => props.theme.textColor};
-`;
-
 const Column = styled.View`
-    width: 40%;
-    margin-left: 15px;
+    width: 60%;
+`;
+const Overview = styled.Text<{ isDark: boolean }>`
+    margin-top: 10px;
+    color: ${(props) => (props.isDark ? "rgba(255, 255, 255, 0.8)" : "rgba(0, 0, 0, 0.8)")};
+`;
+const Votes = styled(Overview)`
+    font-size: 12px;
 `;
 
 interface SlideProps {
@@ -43,18 +39,30 @@ interface SlideProps {
     overview: string;
 }
 
-const Slide: React.FC<SlideProps> = ({ backdropPath, posterPath, originalTitle, voteAverage, overview }) => {
+const Slide: React.FC<SlideProps> = ({
+    backdropPath,
+    posterPath,
+    originalTitle,
+    voteAverage,
+    overview,
+}) => {
     const isDark = useColorScheme() === "dark";
     return (
         <View style={{ flex: 1 }}>
-            <BgImage style={StyleSheet.absoluteFill} source={{ uri: makeImagePath(backdropPath) }} />
-            <BlurView tint={isDark ? "dark" : "light"} intensity={80} style={StyleSheet.absoluteFill}>
+            <BgImg style={StyleSheet.absoluteFill} source={{ uri: makeImgPath(backdropPath) }} />
+            <BlurView
+                tint={isDark ? "dark" : "light"}
+                intensity={85}
+                style={StyleSheet.absoluteFill}
+            >
                 <Wrapper>
                     <Poster path={posterPath} />
                     <Column>
-                        <Title>{originalTitle}</Title>
-                        {voteAverage > 0 ? <Votes>⭐️ {voteAverage} / 10</Votes> : null}
-                        <OverView>{overview.slice(0, 90)}...</OverView>
+                        <Title isDark={isDark}>{originalTitle}</Title>
+                        {voteAverage > 0 ? (
+                            <Votes isDark={isDark}>⭐️ {voteAverage}/10</Votes>
+                        ) : null}
+                        <Overview isDark={isDark}>{overview.slice(0, 100)}...</Overview>
                     </Column>
                 </Wrapper>
             </BlurView>

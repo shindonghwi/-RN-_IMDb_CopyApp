@@ -8,7 +8,7 @@ const Movie = styled.View`
 `;
 
 const Title = styled.Text`
-    color: ${(props) => props.theme.textColor};
+    color: white;
     font-weight: 600;
     margin-top: 7px;
     margin-bottom: 5px;
@@ -24,8 +24,8 @@ const VMedia: React.FC<VMediaProps> = ({ posterPath, originalTitle, voteAverage 
     <Movie>
         <Poster path={posterPath} />
         <Title>
-            {originalTitle.slice(0, 11)}
-            {originalTitle.length > 11 ? "..." : null}
+            {originalTitle.slice(0, 12)}
+            {originalTitle.length > 12 ? "..." : null}
         </Title>
         <Votes votes={voteAverage} />
     </Movie>

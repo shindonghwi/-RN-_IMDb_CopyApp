@@ -6,11 +6,11 @@ interface VotesProps {
 }
 
 const Text = styled.Text`
-    color: ${(props) => props.theme.textColor};
+    color: rgba(255, 255, 255, 0.8);
     font-size: 10px;
 `;
 
 const Votes: React.FC<VotesProps> = ({ votes }) => (
-    <Text>{votes > 0 ? `⭐️ ${votes.toFixed(1)}/10` : `Coming soon`}</Text>
+    <Text>{votes > 0 ? `⭐️ ${votes}/10` : `Coming soon`}</Text>
 );
 export default Votes;
