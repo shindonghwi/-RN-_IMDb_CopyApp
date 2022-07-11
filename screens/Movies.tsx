@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React, { useState } from "react";
-import { Dimensions, FlatList } from "react-native";
+import { ActivityIndicator, Dimensions, FlatList } from "react-native";
 import Swiper from "react-native-swiper";
 import { useQuery, useQueryClient } from "react-query";
 import styled from "styled-components/native";
@@ -9,6 +9,7 @@ import HList from "../components/HList";
 import HMedia from "../components/HMedia";
 import Loader from "../components/Loader";
 import Slide from "../components/Slide";
+import VMedia from "../components/VMedia";
 
 const { height: SCREEN_HEIGHT } = Dimensions.get("window");
 
@@ -37,15 +38,15 @@ const HSeparator = styled.View`
 const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = () => {
     const queryClient = useQueryClient();
     const [refreshing, setRefreshing] = useState(false);
-    const { isLoading: nowPlayingLoading, data: nowPlayingData } = useQuery<MovieResponse>(
+    const { isLoading: nowPlayingLoading, data: nowPlayingData } = useQuery(
         ["movies", "nowPlaying"],
         moviesApi.nowPlaying,
     );
-    const { isLoading: upComingLoading, data: upComingData } = useQuery<MovieResponse>(
+    const { isLoading: upcomingLoading, data: upcomingData } = useQuery(
         ["movies", "upcoming"],
-        moviesApi.upComing,
+        moviesApi.upcoming,
     );
-    const { isLoading: trendingLoading, data: trendingData } = useQuery<MovieResponse>(
+    const { isLoading: trendingLoading, data: trendingData } = useQuery(
         ["movies", "trending"],
         moviesApi.trending,
     );
@@ -54,10 +55,11 @@ const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = () => {
         await queryClient.refetchQueries(["movies"]);
         setRefreshing(false);
     };
-    const loading = nowPlayingLoading || upComingLoading || trendingLoading;
+    const loading = nowPlayingLoading || upcomingLoading || trendingLoading;
+
     return loading ? (
         <Loader />
-    ) : upComingData ? (
+    ) : upcomingData ? (
         <FlatList
             onRefresh={onRefresh}
             refreshing={refreshing}
@@ -84,6 +86,7 @@ const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = () => {
                                 originalTitle={movie.original_title}
                                 voteAverage={movie.vote_average}
                                 overview={movie.overview}
+                                fullData={movie}
                             />
                         ))}
                     </Swiper>
@@ -93,7 +96,7 @@ const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = () => {
                     <ComingSoonTitle>Coming soon</ComingSoonTitle>
                 </>
             }
-            data={upComingData.results}
+            data={upcomingData.results}
             keyExtractor={(item) => item.id + ""}
             ItemSeparatorComponent={HSeparator}
             renderItem={({ item }) => (
@@ -102,6 +105,7 @@ const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = () => {
                     originalTitle={item.original_title}
                     overview={item.overview}
                     releaseDate={item.release_date}
+                    fullData={item}
                 />
             )}
         />
