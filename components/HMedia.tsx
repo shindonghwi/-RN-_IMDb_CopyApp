@@ -2,6 +2,9 @@ import React from "react";
 import styled from "styled-components/native";
 import Poster from "./Poster";
 import Votes from "./Votes";
+import { useNavigation } from "@react-navigation/native";
+import Detail from "../screens/Detail";
+import { TouchableOpacity } from "react-native";
 
 const HMovie = styled.View`
     padding: 0px 30px;
@@ -48,30 +51,44 @@ const HMedia: React.FC<HMediaProps> = ({
     releaseDate,
     voteAverage,
 }) => {
+    const navigation = useNavigation();
+    const goToDetail = () => {
+        navigation.navigate("Stack", {
+            screen: "Detail",
+            params: {
+                originalTitle,
+            },
+        });
+    };
+
     return (
-        <HMovie>
-            <Poster path={posterPath} />
-            <HColumn>
-                <Title>
-                    {originalTitle.length > 30 ? `${originalTitle.slice(0, 30)}...` : originalTitle}
-                </Title>
-                {releaseDate ? (
-                    <Release>
-                        {new Date(releaseDate).toLocaleDateString("ko", {
-                            month: "long",
-                            day: "numeric",
-                            year: "numeric",
-                        })}
-                    </Release>
-                ) : null}
-                {voteAverage ? <Votes votes={voteAverage} /> : null}
-                <Overview>
-                    {overview !== "" && overview.length > 140
-                        ? `${overview.slice(0, 140)}...`
-                        : overview}
-                </Overview>
-            </HColumn>
-        </HMovie>
+        <TouchableOpacity onPress={goToDetail}>
+            <HMovie>
+                <Poster path={posterPath} />
+                <HColumn>
+                    <Title>
+                        {originalTitle.length > 30
+                            ? `${originalTitle.slice(0, 30)}...`
+                            : originalTitle}
+                    </Title>
+                    {releaseDate ? (
+                        <Release>
+                            {new Date(releaseDate).toLocaleDateString("ko", {
+                                month: "long",
+                                day: "numeric",
+                                year: "numeric",
+                            })}
+                        </Release>
+                    ) : null}
+                    {voteAverage ? <Votes votes={voteAverage} /> : null}
+                    <Overview>
+                        {overview !== "" && overview.length > 140
+                            ? `${overview.slice(0, 140)}...`
+                            : overview}
+                    </Overview>
+                </HColumn>
+            </HMovie>
+        </TouchableOpacity>
     );
 };
 
